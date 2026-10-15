@@ -1,0 +1,153 @@
+version: '3.8'
+
+services:
+  # Frontend Development Server
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/dist
+    environment:
+      - VITE_API_URL=http://backend:8000
+      - VITE_WS_URL=ws://backend:8000/ws/live
+      - VITE_APP_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - arc-labs-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API Server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+      - "9090:9090"
+    volumes:
+      - ./backend:/app
+      - ./data:/app/data
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///./data/arc_labs.db
+      - SECRET_KEY=dev-secret-key-change-in-production-min-32-chars
+      - CORS_ORIGINS=["http://localhost:5173","http://frontend:5173"]
+      - SERIAL_PORT=/dev/ttyUSB0
+      - SERIAL_BAUDRATE=115200
+      - SERIAL_MOCK=true
+      - LOG_LEVEL=DEBUG
+      - METRICS_ENABLED=true
+      - METRICS_PORT=9090
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    networks:
+      - arc-labs-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Override backend for socat mock profile
+  backend-socat:
+    extends:
+      service: backend
+    environment:
+      - SERIAL_MOCK=true
+      - SERIAL_PORT=/tmp/ttyVIRT0
+    devices: []
+    profiles:
+      - mock-socat
+    depends_on:
+      - mock-serial-socat
+
+  # Mock Serial Data Generator - Python implementation (for testing without hardware)
+  mock-serial:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: python scripts/dev_serial.py
+    volumes:
+      - ./backend:/app
+    environment:
+      - SERIAL_MOCK=true
+      - MOCK_INTERVAL=1.0
+    depends_on:
+      - backend
+    networks:
+      - arc-labs-network
+    profiles:
+      - mock
+
+  # Mock Serial Data Generator - Socat implementation (alternative using virtual PTY pair)
+  mock-serial-socat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: python scripts/dev_serial_socat.py
+    volumes:
+      - ./backend:/app
+    environment:
+      - MOCK_INTERVAL=1.0
+    depends_on:
+      - backend
+    networks:
+      - arc-labs-network
+    profiles:
+      - mock-socat
+    cap_add:
+      - SYS_ADMIN  # Required for PTY creation
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - arc-labs-network
+    profiles:
+      - monitoring
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - arc-labs-network
+    profiles:
+      - monitoring
+
+networks:
+  arc-labs-network:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:

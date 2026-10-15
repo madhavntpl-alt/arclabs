@@ -1,0 +1,95 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Frontend: Vite Dev",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
+    },
+    {
+      "name": "Frontend: Vite Test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/frontend/node_modules/vitest/vitest.mjs",
+      "args": ["run"],
+      "cwd": "${workspaceFolder}/frontend",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Backend: FastAPI",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "app.main:app",
+        "--reload",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ],
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Backend: Tests",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "-v",
+        "--tb=short"
+      ],
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Firmware: Build & Upload",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/firmware/.pio/build/uno/firmware.elf",
+      "cwd": "${workspaceFolder}/firmware",
+      "MIMode": "gdb",
+      "miDebuggerPath": "avr-gdb",
+      "miDebuggerServerAddress": "localhost:1234",
+      "setupCommands": [
+        {
+          "description": "Enable pretty printing",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "platformio:upload"
+    },
+    {
+      "name": "Docker: Backend",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-compose: up",
+      "platform": "node",
+      "containerName": "arc-labs-backend"
+    },
+    {
+      "name": "Full Stack: Docker Compose",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-compose: up",
+      "platform": "node"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack Dev",
+      "configurations": ["Frontend: Vite Dev", "Backend: FastAPI"],
+      "stopAll": true
+    }
+  ]
+}

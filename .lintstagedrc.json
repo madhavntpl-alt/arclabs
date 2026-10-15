@@ -1,0 +1,19 @@
+{
+  "*.{ts,tsx,js,jsx,json,md,yaml,yml}": [
+    "prettier --write",
+    "eslint --fix"
+  ],
+  "*.py": [
+    "ruff check --fix",
+    "ruff format"
+  ],
+  "*.{cpp,h,hpp}": [
+    "clang-format -i"
+  ],
+  "package.json": [
+    "prettier --write"
+  ],
+  "pnpm-lock.yaml": [
+    "prettier --write"
+  ]
+}

@@ -1,0 +1,413 @@
+/**
+ * Design Tokens
+ * Generated from design-system skill - CSS Custom Properties
+ * Single source of truth for all design values - ARC LABS Brand
+ */
+
+:root {
+  /* Color Primitives - ARC LABS Brand Colors */
+  --color-arc-navy-50: #e8ebf1;
+  --color-arc-navy-100: #d1dbe8;
+  --color-arc-navy-200: #a3b7d1;
+  --color-arc-navy-300: #7593c4;
+  --color-arc-navy-300: #7593c4;
+  --color-arc-navy-400: #476fb8;
+  --color-arc-navy-500: #1A2332; /* Secondary dark */
+  --color-arc-navy-600: #0A0F1A; /* Dark navy background */
+  --color-arc-navy-700: #080C14;
+  --color-arc-navy-800: #060910;
+  --color-arc-navy-900: #04060C;
+  --color-arc-navy-950: #020306;
+
+  --color-arc-teal-50: #e6fffa;
+  --color-arc-teal-100: #b2f5ea;
+  --color-arc-teal-200: #81e6d9;
+  --color-arc-teal-300: #4fd1c5;
+  --color-arc-teal-400: #38b2ac;
+  --color-arc-teal-500: #00D4AA; /* Primary teal - primary actions, online status */
+  --color-arc-teal-600: #00b894;
+  --color-arc-teal-600: #00D4AA;
+  --color-arc-teal-700: #00907a;
+  --color-arc-teal-800: #007560;
+  --color-arc-teal-900: #005a44;
+  --color-arc-teal-950: #003D2D;
+
+  --color-arc-orange-50: #fff7ed;
+  --color-arc-orange-100: #ffedd5;
+  --color-arc-orange-200: #fed7aa;
+  --color-arc-orange-300: #fdba74;
+  --color-arc-orange-400: #fb923c;
+  --color-arc-orange-500: #FF6B35; /* Orange-red - critical alerts */
+  --color-arc-orange-600: #ea580c;
+  --color-arc-orange-600: #FF6B35;
+  --color-arc-orange-700: #c2410c;
+  --color-arc-orange-800: #9a340c;
+  --color-arc-orange-900: #78350f;
+  --color-arc-orange-950: #431407;
+
+  --color-arc-amber-50: #fffbeb;
+  --color-arc-amber-100: #fef3c7;
+  --color-arc-amber-200: #fde68a;
+  --color-arc-amber-300: #fcd34d;
+  --color-arc-amber-400: #fbbf24;
+  --color-arc-amber-500: #FFD600; /* Amber - warnings */
+  --color-arc-amber-600: #d97706;
+  --color-arc-amber-600: #FFD600;
+  --color-arc-amber-700: #b45309;
+  --color-arc-amber-800: #92400e;
+  --color-arc-amber-900: #78350f;
+  --color-arc-amber-950: #451A03;
+
+  /* Semantic Color Aliases */
+  --color-primary-50: #e6fffa;
+  --color-primary-100: #b2f5ea;
+  --color-primary-200: #81e6d9;
+  --color-primary-300: #4fd1c5;
+  --color-primary-400: #38b2ac;
+  --color-primary-500: #00D4AA; /* Primary teal */
+  --color-primary-600: #00b894;
+  --color-primary-500: #00D4AA;
+  --color-primary-600: #00b894;
+  --color-primary-700: #00907a;
+  --color-primary-800: #007560;
+  --color-primary-900: #005a44;
+  --color-primary-950: #003D2D;
+
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #0A0F1A;
+  --color-surface-card-light: #ffffff;
+  --color-surface-card-dark: #1A2332;
+  --color-border-light: #e2e8f0;
+  --color-border-dark: #2D3A4F;
+
+  --color-text-primary-light: #0A0F1A;
+  --color-text-primary-dark: #F8FAFC;
+  --color-text-secondary-light: #475569;
+  --color-text-secondary-dark: #94A3B8;
+  --color-text-muted-light: #94A3B8;
+  --color-text-muted-dark: #64748B;
+
+  --color-status-normal: #22c55e;
+  --color-status-warning: #FFD600;
+  --color-status-critical: #FF6B35;
+  --color-status-unknown: #6b7280;
+
+  --color-severity-info: #00D4AA;
+  --color-severity-warning: #FFD600;
+  --color-severity-critical: #FF6B35;
+  --color-severity-emergency: #7c2d12;
+
+  --color-online: #00D4AA;
+  --color-offline: #64748B;
+
+  /* Spacing Scale */
+  --space-0: 0;
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* Typography */
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+  --font-size-5xl: 3rem;        /* 48px */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.1;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  /* Border Radius */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;    /* 2px */
+  --radius-md: 0.375rem;    /* 6px */
+  --radius-lg: 0.5rem;      /* 8px */
+  --radius-xl: 0.75rem;     /* 12px */
+  --radius-2xl: 1rem;       /* 16px */
+  --radius-3xl: 1.5rem;     /* 24px */
+  --radius-4xl: 2rem;       /* 32px */
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+  /* Component Shadows */
+  --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  --shadow-elevated: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+  --shadow-dropdown: 0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-Index Scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-toast: 800;
+
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* Container */
+  --container-max-width: 80rem; /* 1280px */
+  --container-padding: 1.5rem;  /* 24px */
+
+  /* Sensor Specific */
+  --sensor-card-height: 160px;
+  --sensor-value-font-size: 3rem; /* 48px */
+  --sensor-unit-font-size: 1rem;  /* 16px */
+
+  /* Chart */
+  --chart-height: 300px;
+  --chart-tooltip-bg: rgba(15, 23, 42, 0.95);
+  --chart-grid-color: rgba(148, 163, 184, 0.2);
+  --chart-axis-color: rgba(148, 163, 184, 0.4);
+
+  /* Sensor Specific Colors */
+  --color-water-level: #00D4AA;
+  --color-temperature: #FF6B35;
+  --color-humidity: #06b6d4;
+  --color-gas: #FFD600;
+  --color-battery: #22c55e;
+
+  /* Status Colors */
+  --color-status-normal: #22c55e;
+  --color-status-warning: #FFD600;
+  --color-status-critical: #FF6B35;
+  --color-status-unknown: #6b7280;
+
+  /* Severity Colors */
+  --color-severity-info: #00D4AA;
+  --color-severity-warning: #FFD600;
+  --color-severity-critical: #FF6B35;
+  --color-severity-emergency: #7c2d12;
+
+  /* Status Indicators */
+  --status-dot-size: 0.5rem; /* 8px */
+
+  /* Animation Delays */
+  --delay-0: 0ms;
+  --delay-50: 50ms;
+  --delay-100: 100ms;
+  --delay-150: 150ms;
+  --delay-200: 200ms;
+  --delay-250: 250ms;
+  --delay-300: 300ms;
+  --delay-400: 400ms;
+  --delay-500: 500ms;
+
+  /* Focus Ring */
+  --focus-ring: 0 0 0 2px var(--color-primary-500);
+
+  /* Glass Effect */
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg-dark: rgba(26, 35, 50, 0.8);
+  --glass-blur: blur(16px);
+}
+
+/* Dark Mode Overrides */
+.dark {
+  --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-elevated: 0 10px 40px -10px rgba(0, 0, 0, 0.4), 0 2px 10px -2px rgba(0, 0, 0, 0.2);
+  --shadow-dropdown: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 0 2px 10px -2px rgba(0, 0, 0, 0.3);
+  --chart-tooltip-bg: rgba(248, 250, 252, 0.95);
+  --chart-grid-color: rgba(148, 163, 184, 0.15);
+  --chart-axis-color: rgba(148, 163, 184, 0.3);
+}
+
+/* Sensor-Specific Gradients */
+.sensor-gradient-water {
+  background: linear-gradient(135deg, #00D4AA 0%, #00b894 100%);
+}
+
+.sensor-gradient-temperature {
+  background: linear-gradient(135deg, #FF6B35 0%, #c2410c 100%);
+}
+
+.sensor-gradient-humidity {
+  background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+}
+
+.sensor-gradient-gas {
+  background: linear-gradient(135deg, #FFD600 0%, #b45309 100%);
+}
+
+.sensor-gradient-battery {
+  background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+}
+
+/* Status Indicators */
+.status-dot {
+  @apply w-2 h-2 rounded-full;
+}
+
+.status-dot-normal {
+  @apply status-dot bg-green-500;
+}
+
+.status-dot-warning {
+  @apply status-dot bg-amber-500 animate-pulse;
+}
+
+.status-dot-critical {
+  @apply status-dot bg-red-500 animate-pulse;
+}
+
+.status-dot-unknown {
+  @apply status-dot bg-gray-400;
+}
+
+/* Animation Delays */
+.delay-0 { animation-delay: 0ms; }
+.delay-50 { animation-delay: 50ms; }
+.delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-250 { animation-delay: 250ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus Ring */
+.focus-ring {
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-secondary-900;
+}
+
+/* Glass Effect */
+.glass {
+  @apply bg-white/80 dark:bg-secondary-900/80 backdrop-blur-lg;
+}
+
+.glass-card {
+  @apply glass border border-secondary-200/50 dark:border-secondary-700/50 shadow-card;
+}
+
+/* Sensor Specific Gradients */
+.sensor-gradient-water {
+  background: linear-gradient(135deg, #00D4AA 0%, #00b894 100%);
+}
+
+.sensor-gradient-temperature {
+  background: linear-gradient(135deg, #FF6B35 0%, #c2410c 100%);
+}
+
+.sensor-gradient-humidity {
+  background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+}
+
+.sensor-gradient-gas {
+  background: linear-gradient(135deg, #FFD600 0%, #b45309 100%);
+}
+
+.sensor-gradient-battery {
+  background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+}
+
+/* Status Indicators */
+.status-dot {
+  @apply w-2 h-2 rounded-full;
+}
+
+.status-dot-normal {
+  @apply status-dot bg-green-500;
+}
+
+.status-dot-warning {
+  @apply status-dot bg-amber-500 animate-pulse;
+}
+
+.status-dot-critical {
+  @apply status-dot bg-red-500 animate-pulse;
+}
+
+.status-dot-unknown {
+  @apply status-dot bg-secondary-400;
+}
+
+/* Animation Delays */
+.delay-0 { animation-delay: 0ms; }
+.delay-50 { animation-delay: 50ms; }
+.delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-250 { animation-delay: 250ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus Ring */
+.focus-ring {
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-secondary-900;
+}
+
+/* Glass Effect */
+.glass {
+  @apply bg-white/80 dark:bg-secondary-900/80 backdrop-blur-lg;
+}
+
+.glass-card {
+  @apply glass border border-secondary-200/50 dark:border-secondary-700/50 shadow-card;
+}

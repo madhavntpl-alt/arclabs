@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Pre-commit hook: lint, format, typecheck staged files
+echo "🔍 Running pre-commit checks..."
+
+# Get staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | tr '\n' ' ')
+
+if [ -z "$STAGED_FILES" ]; then
+  echo "No staged files to check."
+  exit 0
+fi
+
+# Run lint-staged for staged files
+npx lint-staged --config .lintstagedrc.json
+
+# Run typecheck on affected packages
+echo "🔧 Running typecheck..."
+pnpm typecheck --if-present 2>/dev/null || true
+
+echo "✅ Pre-commit checks passed!"

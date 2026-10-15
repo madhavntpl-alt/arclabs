@@ -1,0 +1,106 @@
+name: CD Backend
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - 'shared/**'
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - '.github/workflows/cd-backend.yml'
+
+jobs:
+  build-and-push:
+    name: Build & Push Backend Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/backend
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix=
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ github.sha }},enable={{is_default_branch}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+      - name: Verify image
+        run: |
+          docker pull ${{ steps.meta.outputs.tags }}
+          docker run --rm ${{ steps.meta.outputs.tags }} python -m app.main --check
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    environment: staging
+    steps:
+      - name: Deploy to staging server
+        run: |
+          echo "Deploying to staging..."
+          # SSH to staging server and run deployment script
+          # ssh user@staging.arc-labs.com ./scripts/deploy-backend.sh staging
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production..."
+          # SSH to production server and run deployment script
+          # ssh user@api.arc-labs.com ./scripts/deploy-backend.sh production
+
+      - name: Health check
+        run: |
+          sleep 30
+          curl -f https://api.arc-labs.com/health || exit 1
+
+      - name: Smoke tests
+        run: |
+          curl -f https://api.arc-labs.com/api/v1/sensors
+          curl -f https://api.arc-labs.com/api/v1/devices
+
+  rollback:
+    name: Rollback
+    runs-on: ubuntu-latest
+    if: failure() && github.ref == 'refs/heads/main'
+    needs: deploy-production
+    steps:
+      - name: Rollback to previous version
+        run: |
+          echo "Rolling back..."
+          # Get previous image tag
+          # ssh user@api.arc-labs.com ./scripts/rollback-backend.sh

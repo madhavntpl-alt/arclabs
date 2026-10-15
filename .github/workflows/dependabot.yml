@@ -1,0 +1,154 @@
+# Dependabot Configuration
+# This file configures automated dependency updates for the monorepo
+
+version: 2
+updates:
+  # Root package.json (pnpm workspace)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "arc-labs/maintainers"
+    assignees:
+      - "arc-labs/bot"
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore(deps): "
+      include: "scope"
+    groups:
+      dev-dependencies:
+        patterns:
+          - "*"
+        dependency-type: "development"
+      eslint-plugins:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint/*"
+        dependency-type: "development"
+      testing-tools:
+        patterns:
+          - "vitest*"
+          - "playwright*"
+          - "@testing-library/*"
+        dependency-type: "development"
+
+  # Frontend package
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "arc-labs/frontend-team"
+    assignees:
+      - "arc-labs/bot"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "frontend"
+    commit-message:
+      prefix: "chore(frontend): "
+      include: "scope"
+    ignore:
+      # Ignore major version updates for React until tested
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+  # Shared package
+  - package-ecosystem: "npm"
+    directory: "/shared"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "arc-labs/maintainers"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "shared"
+
+  # Backend (Python/Poetry)
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "arc-labs/backend-team"
+    assignees:
+      - "arc-labs/bot"
+    labels:
+      - "dependencies"
+      - "python"
+      - "backend"
+    commit-message:
+      prefix: "chore(backend): "
+      include: "scope"
+    ignore:
+      # Pin Python version
+      - dependency-name: "python"
+        versions: ["3.11.*"]
+      # Be careful with FastAPI major updates
+      - dependency-name: "fastapi"
+        update-types: ["version-update:semver-major"]
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "arc-labs/maintainers"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci): "
+      include: "scope"
+
+  # Docker base images
+  - package-ecosystem: "docker"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "arc-labs/backend-team"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "backend"
+
+  # Docker base images for frontend
+  - package-ecosystem: "docker"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "arc-labs/frontend-team"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "frontend"

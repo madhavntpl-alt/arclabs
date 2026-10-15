@@ -1,0 +1,92 @@
+/**
+ * @name Python Security Queries
+ * @description Security queries specific to ARC LABS Python codebase
+ * @kind path-problem
+ * @id arc-labs/python-security
+ * @tags security, python, arc-labs
+ */
+
+import python
+
+/**
+ * Detects hardcoded secrets in Python files
+ */
+from string s, File f
+where
+  s.getFile() = f and
+  s.matches("%(?i)(secret|password|api[_-]?key|token|private[_-]?key|api[_-]?secret)%") and
+  not f.getPath().matches("%test%") and
+  not f.getPath().matches("%\.pyc$%") and
+  not f.getPath().matches("%node_modules%")
+select s, "Potential hardcoded secret detected", "security", "warning"
+
+/**
+ * Detects SQL injection vulnerabilities
+ */
+from string s, File f
+where
+  s.getFile() = f and
+  (s.matches("%execute(%") or s.matches("%executemany(%") or s.matches("%cursor%.execute(%")) and
+  (s.matches("%f\"%") or s.matches("%format(%") or s.matches("%.format(%"))
+select s, "Potential SQL injection: using string formatting in SQL query", "security", "error"
+
+/**
+ * Detects unsafe deserialization
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  (c.getFunc().hasName("pickle.loads") or
+   c.getFunc().hasName("pickle.load") or
+   c.getFunc().hasName("yaml.load") or
+   c.getFunc().hasName("yaml.unsafe_load") or
+   c.getFunc().hasName("marshal.loads") or
+   c.getFunc().hasName("eval") or
+   c.getFunc().hasName("exec"))
+select c, "Unsafe deserialization: using pickle/yaml.load/eval with untrusted input", "security", "error"
+
+/**
+ * Detects command injection vulnerabilities
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  (c.getFunc().hasName("subprocess.run") or
+   c.getFunc().hasName("subprocess.Popen") or
+   c.getFunc().hasName("os.system") or
+   c.getFunc().hasName("os.popen") or
+   c.getFunc().hasName("commands.getstatusoutput") or
+   c.getFunc().hasName("commands.getoutput")) and
+  exists(Arg a | a.getArgument().getArgument().(Call).getFunc().hasName("format"))
+select c, "Potential command injection: user input in command construction", "security", "error"
+
+/**
+ * Detects hardcoded serial port paths
+ */
+from string s, File f
+where
+  s.getFile() = f and
+  s.matches("%/dev/ttyUSB%") or s.matches("%/dev/ttyACM%") or s.matches("%COM[0-9]+%") and
+  not f.getPath().matches("%test%") and
+  not f.getPath().matches("%mock%")
+select s, "Hardcoded serial port path - should be configurable via environment variable", "portability", "warning"
+
+/**
+ * Detects unsafe serial communication without timeout
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  c.getFunc().hasName("serial.Serial") and
+  not c.getArguments().any(a | a.getKeyword() = "timeout")
+select c, "Serial connection without timeout - can block indefinitely", "reliability", "warning"
+
+/**
+ * Detects missing input validation for sensor data
+ */
+from Function f, Parameter p
+where
+  f.getFile().getPath().matches("%services/sensor%") or f.getFile().getPath().matches("%services/data%") and
+  p = f.getParameter() and
+  not f.getBody().(IfStmt).getCondition().(ComparisonExpr).exists()
+select f, "Sensor data processing function lacks input validation", "security", "warning"

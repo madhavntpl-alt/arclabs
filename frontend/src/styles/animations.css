@@ -1,0 +1,523 @@
+/**
+ * Animation Keyframes
+ * Motion-foundations keyframes for React/Motion
+ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    transform: rotate(-5deg) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes pulseHard {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bounceSubtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes accordionDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordionUp {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes dialogOverlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialogContentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes drawerSlideLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawerSlideRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes tooltipShow {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dropdownShow {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tabIndicatorMove {
+  from {
+    transform: translateX(var(--tab-indicator-start, 0));
+    width: var(--tab-indicator-width, auto);
+  }
+  to {
+    transform: translateX(var(--tab-indicator-end, 0));
+    width: var(--tab-indicator-width, auto);
+  }
+}
+
+/* Stagger Animation Delays */
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+.stagger-6 { animation-delay: 300ms; }
+.stagger-7 { animation-delay: 350ms; }
+.stagger-8 { animation-delay: 400ms; }
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Motion Variants - for use with motion/framer-motion */
+.motion-enter {
+  animation: fadeIn var(--transition-normal) ease-out, slideUp var(--transition-normal) ease-out;
+}
+
+.motion-exit {
+  animation: fadeOut var(--transition-fast) ease-in, slideDown var(--transition-fast) ease-in;
+}
+
+.motion-enter-quick {
+  animation: fadeIn var(--transition-fast) ease-out, scaleIn var(--transition-fast) ease-out;
+}
+
+.motion-exit-quick {
+  animation: fadeOut var(--transition-fast) ease-in, scaleOut var(--transition-fast) ease-in;
+}
+
+/* Page Transitions */
+.page-enter {
+  animation: fadeIn var(--transition-slow) ease-out, slideUp var(--transition-slow) ease-out;
+}
+
+.page-exit {
+  animation: fadeOut var(--transition-normal) ease-in, slideDown var(--transition-normal) ease-in;
+}
+
+/* Modal Animations */
+.modal-overlay-enter {
+  animation: dialogOverlayShow var(--transition-normal) ease-out;
+}
+
+.modal-overlay-exit {
+  animation: dialogOverlayShow var(--transition-fast) ease-in reverse;
+}
+
+.modal-content-enter {
+  animation: dialogContentShow var(--transition-normal) ease-out;
+}
+
+.modal-content-exit {
+  animation: dialogContentShow var(--transition-fast) ease-in reverse;
+}
+
+/* Drawer Animations */
+.drawer-enter {
+  animation: drawerSlideLeft var(--transition-slow) ease-out;
+}
+
+.drawer-exit {
+  animation: drawerSlideLeft var(--transition-normal) ease-in reverse;
+}
+
+/* Toast Animations */
+.toast-enter {
+  animation: toastSlideIn var(--transition-normal) ease-out;
+}
+
+.toast-exit {
+  animation: toastSlideOut var(--transition-normal) ease-in;
+}
+
+/* Tooltip Animations */
+.tooltip-enter {
+  animation: tooltipShow var(--transition-fast) ease-out;
+}
+
+.tooltip-exit {
+  animation: tooltipShow var(--transition-fast) ease-in reverse;
+}
+
+/* Dropdown Animations */
+.dropdown-enter {
+  animation: dropdownShow var(--transition-fast) ease-out;
+}
+
+.dropdown-exit {
+  animation: dropdownShow var(--transition-fast) ease-in reverse;
+}
+
+/* Loading Animations */
+.skeleton-wave {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary-200) 25%,
+    var(--color-secondary-300) 50%,
+    var(--color-secondary-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .skeleton-wave {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary-700) 25%,
+    var(--color-secondary-600) 50%,
+    var(--color-secondary-700) 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* Sensor Value Animations */
+.sensor-value-enter {
+  animation: scaleIn var(--transition-normal) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sensor-value-update {
+  animation: pulseHard 0.5s ease-out;
+}
+
+/* Chart Animations */
+.chart-line-draw {
+  animation: chartLineDraw 1s ease-out forwards;
+}
+
+@keyframes chartLineDraw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.chart-bar-grow {
+  animation: chartBarGrow 0.8s ease-out forwards;
+}
+
+@keyframes chartBarGrow {
+  from {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+/* Connection Status */
+.connection-pulse {
+  animation: pulseSoft 2s infinite;
+}
+
+.connection-connecting {
+  animation: pulseHard 1s infinite;
+}
+
+/* Alert Animations */
+.alert-enter {
+  animation: slideRight var(--transition-normal) ease-out, fadeIn var(--transition-normal) ease-out;
+}
+
+.alert-exit {
+  animation: slideLeft var(--transition-fast) ease-in, fadeOut var(--transition-fast) ease-in;
+}
+
+/* Button States */
+.btn-press {
+  animation: scaleIn 0.1s ease-out;
+}
+
+.btn-release {
+  animation: scaleOut 0.1s ease-in;
+}
+
+/* Navigation */
+.nav-link-hover::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300;
+}
+
+.nav-link-hover:hover::after {
+  @apply w-full;
+}
+
+/* Card Hover */
+.card-lift {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated;
+}
+
+/* List Item */
+.list-item-enter {
+  animation: fadeIn var(--transition-normal) ease-out, slideUp var(--transition-normal) ease-out;
+}
+
+.list-item-exit {
+  animation: fadeOut var(--transition-fast) ease-in, scaleOut var(--transition-fast) ease-in;
+}
+
+/* Form Field */
+.field-error-shake {
+  animation: shake 0.4s ease-out;
+}
+
+/* Progress Ring */
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.5s ease-out;
+}
+
+/* Number Counter */
+.number-counter {
+  animation: numberCount 1s ease-out forwards;
+}
+
+@keyframes numberCount {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

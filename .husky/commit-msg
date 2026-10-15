@@ -1,0 +1,50 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Commit message validation hook
+# Enforces Conventional Commits format
+
+commit_msg=$(cat "$1")
+
+# Conventional Commits regex
+# type(scope): description
+# type: description
+# Allowed types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
+conventional_regex='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .{1,100}'
+
+if ! echo "$commit_msg" | grep -qE "$conventional_regex"; then
+  echo "❌ Invalid commit message format!"
+  echo ""
+  echo "Commit message must follow Conventional Commits format:"
+  echo "  <type>(<scope>): <description>"
+  echo ""
+  echo "Allowed types:"
+  echo "  feat      - New feature"
+  echo "  fix       - Bug fix"
+  echo "  docs      - Documentation changes"
+  echo "  style     - Formatting, no code change"
+  echo "  refactor  - Code restructuring"
+  echo "  test      - Adding/updating tests"
+  echo "  chore     - Maintenance tasks"
+  echo "  perf      - Performance improvements"
+  echo "  ci        - CI/CD changes"
+  echo "  build     - Build system changes"
+  echo "  revert    - Revert previous commit"
+  echo ""
+  echo "Examples:"
+  echo "  feat(frontend): add water level chart component"
+  echo "  fix(backend): resolve serial connection timeout"
+  echo "  docs: update API documentation"
+  echo "  refactor(shared): extract sensor types to separate file"
+  echo ""
+  echo "Your message: $commit_msg"
+  exit 1
+fi
+
+# Check for breaking change footer
+if echo "$commit_msg" | grep -q "BREAKING CHANGE:"; then
+  echo "⚠️  Breaking change detected - ensure version bump is planned"
+fi
+
+echo "✅ Commit message format valid"
+exit 0

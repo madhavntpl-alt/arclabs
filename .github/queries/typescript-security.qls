@@ -1,0 +1,132 @@
+/**
+ * @name TypeScript/JavaScript Security Queries
+ * @description Security queries specific to ARC LABS TypeScript/React codebase
+ * @kind path-problem
+ * @id arc-labs/typescript-security
+ * @tags security, typescript, react, arc-labs
+ */
+
+import javascript
+
+/**
+ * Detects hardcoded secrets in TypeScript/JavaScript files
+ */
+from string s, File f
+where
+  s.getFile() = f and
+  s.matches("%(?i)(secret|password|api[_-]?key|token|private[_-]?key|api[_-]?secret)%") and
+  not f.getPath().matches("%test%") and
+  not f.getPath().matches("%mock%") and
+  not f.getPath().matches("%.d.ts$%") and
+  not f.getPath().matches("%node_modules%")
+select s, "Potential hardcoded secret detected", "security", "warning"
+
+/**
+ * Detects XSS vulnerabilities in React - dangerouslySetInnerHTML
+ */
+from JSXElement e, File f
+where
+  e.getFile() = f and
+  e.getAttribute("dangerouslySetInnerHTML") != null and
+  not e.getAttribute("dangerouslySetInnerHTML").getValue().(JSXExpressionContainer).getExpression().(CallExpr).getCallee().(Identifier).hasName("sanitize")
+select e, "XSS risk: dangerouslySetInnerHTML used without sanitization", "security", "error"
+
+/**
+ * Detects eval usage
+ */
+from CallExpr c, File f
+where
+  c.getFile() = f and
+  c.getCallee().(Identifier).hasName("eval")
+select c, "eval() usage - potential code injection", "security", "error"
+
+/**
+ * Detects innerHTML assignment without sanitization
+ */
+from AssignExpr a, File f
+where
+  a.getFile() = f and
+  a.getTarget().(MemberExpr).getPropertyName() = "innerHTML" and
+  not a.getValue().(CallExpr).getCallee().(Identifier).hasName("sanitize")
+select a, "XSS risk: innerHTML assignment without sanitization", "security", "error"
+
+/**
+ * Detects document.write usage
+ */
+from CallExpr c, File f
+where
+  c.getFile() = f and
+  c.getCallee().(MemberExpr).getPropertyName() = "write" and
+  c.getCallee().(MemberExpr).getObject().(Identifier).hasName("document")
+select c, "document.write() usage - potential XSS", "security", "warning"
+
+/**
+ * Detects localStorage/sessionStorage usage without encryption
+ */
+from CallExpr c, File f
+where
+  c.getFile() = f and
+  (c.getCallee().(MemberExpr).getPropertyName() = "setItem" or
+   c.getCallee().(MemberExpr).getPropertyName() = "getItem") and
+  (c.getCallee().(MemberExpr).getObject().(Identifier).hasName("localStorage") or
+   c.getCallee().(MemberExpr).getObject().(Identifier).hasName("sessionStorage"))
+select c, "Storing sensitive data in localStorage/sessionStorage without encryption", "security", "warning"
+
+/**
+ * Detects console.log in production code
+ */
+from CallExpr c, File f
+where
+  c.getFile() = f and
+  c.getCallee().(MemberExpr).getObject().(Identifier).hasName("console") and
+  c.getCallee().(MemberExpr).getPropertyName().matches("%(log|debug|info|warn|error)%") and
+  not f.getPath().matches("%test%") and
+  not f.getPath().matches("%mock%")
+select c, "Console logging in production code - consider removing or using proper logger", "maintainability", "warning"
+
+/**
+ * Detects fetch/axios without error handling
+ */
+from CallExpr c, File f
+where
+  c.getFile() = f and
+  (c.getCallee().(Identifier).hasName("fetch") or
+   c.getCallee().(MemberExpr).getPropertyName() = "get" or
+   c.getCallee().(MemberExpr).getPropertyName() = "post" or
+   c.getCallee().(MemberExpr).getPropertyName() = "put" or
+   c.getCallee().(MemberExpr).getPropertyName() = "delete") and
+  not c.getParent().(AwaitExpr).exists() and
+  not c.getParent().(CallExpr).getCallee().(MemberExpr).getPropertyName() = "then"
+select c, "HTTP request without error handling - missing await or .catch()", "reliability", "warning"
+
+/**
+ * Detects localStorage usage without validation
+ */
+from CallExpr c, File f
+where
+  c.getFile() = f and
+  c.getCallee().(MemberExpr).getObject().(Identifier).hasName("localStorage") and
+  c.getCallee().(MemberExpr).getPropertyName().matches("%(setItem|getItem)%") and
+  c.getArguments().size() > 0 and
+  c.getArguments().get(0).(Literal).exists()
+select c, "localStorage usage with hardcoded key - consider validation", "security", "note"
+
+/**
+ * Detects missing React keys in lists
+ */
+from JSXElement e, File f
+where
+  e.getFile() = f and
+  e.getParent().(JSXElement).getOpeningElement().getName() = "map" and
+  not e.getAttribute("key").exists()
+select e, "Missing React key prop in list rendering", "performance", "warning"
+
+/**
+ * Detects missing React.memo for components with expensive renders
+ */
+from Component c, File f
+where
+  c.getFile() = f and
+  c.getParent().(FunctionDeclaration).getName().matches("%(List|Table|Grid|Chart)%") and
+  not c.getDecorators().any(d | d.getName() = "memo")
+select c, "Component likely needs React.memo for performance optimization", "performance", "note"

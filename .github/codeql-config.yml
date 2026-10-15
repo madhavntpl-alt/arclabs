@@ -1,0 +1,29 @@
+name: "ARC LABS CodeQL Configuration"
+
+disable-default-queries: false
+
+queries:
+  - uses: security-and-quality
+  - uses: security-extended
+
+paths-ignore:
+  - node_modules
+  - dist
+  - build
+  - .git
+  - ".github/**"
+  - "*.md"
+  - "*.lock"
+  - "*.yml"
+  - "*.yaml"
+
+# Custom queries for ARC LABS specific patterns
+queries:
+  - uses: ./queries/python-security.qls
+  - uses: ./queries/typescript-security.qls
+  - uses: ./queries/serial-security.qls
+
+# Severity thresholds
+fail-on:
+  - critical
+  - high

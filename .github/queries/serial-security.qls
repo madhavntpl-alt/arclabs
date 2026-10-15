@@ -1,0 +1,91 @@
+/**
+ * @name Serial Communication Security Queries
+ * @description Security queries specific to ARC LABS serial communication
+ * @kind path-problem
+ * @id arc-labs/serial-security
+ * @tags security, serial, arc-labs
+ */
+
+import python
+
+/**
+ * Detects hardcoded serial port paths
+ */
+from string s, File f
+where
+  s.getFile() = f and
+  (s.matches("%/dev/ttyUSB%") or s.matches("%/dev/ttyACM%") or s.matches("%COM[0-9]+%")) and
+  not f.getPath().matches("%test%") and
+  not f.getPath().matches("%mock%")
+select s, "Hardcoded serial port path - should be configurable via environment variable", "portability", "warning"
+
+/**
+ * Detects unsafe serial communication without timeout
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  c.getFunc().hasName("serial.Serial") and
+  not c.getArguments().any(a | a.getKeyword() = "timeout")
+select c, "Serial connection without timeout - can block indefinitely", "reliability", "warning"
+
+/**
+ * Detects unsafe serial communication without checksum validation
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  c.getFunc().hasName("serial.Serial") and
+  not c.getArguments().any(a | a.getKeyword() = "checksum")
+select c, "Serial communication without checksum validation - data integrity not verified", "security", "warning"
+
+/**
+ * Detects unsafe serial command sending without acknowledgment
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  c.getFunc().hasName("serial.Serial.write") and
+  not c.getParent().(CallExpr).getCallee().(MemberExpr).getPropertyName() = "readline"
+select c, "Serial command sent without waiting for acknowledgment - command may be lost", "reliability", "warning"
+
+/**
+ * Detects unsafe command injection in serial commands
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  c.getFunc().hasName("serial.Serial.write") and
+  c.getArguments().get(0).(CallExpr).getCallee().(MemberExpr).getPropertyName() = "format"
+select c, "Potential command injection in serial command formatting", "security", "error"
+
+/**
+ * Detects missing serial port error handling
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  c.getFunc().hasName("serial.Serial") and
+  not c.getParent().(TryStmt).exists()
+select c, "Serial port initialization without error handling - may crash on port failure", "reliability", "warning"
+
+/**
+ * Detects unsafe baudrate configuration
+ */
+from Call c, File f
+where
+  c.getFile() = f and
+  c.getFunc().hasName("serial.Serial") and
+  c.getArguments().any(a | a.getKeyword() = "baudrate" and a.getValue().(Literal).getValue().(int) > 115200)
+select c, "Baud rate higher than 115200 may cause communication errors", "reliability", "warning"
+
+/**
+ * Detects missing serial port close on cleanup
+ */
+from Function f, File fi
+where
+  f.getFile() = fi and
+  f.getName().matches(".*(connect|open|init).*") and
+  f.getBody().(CallExpr).getCallee().(MemberExpr).getPropertyName() = "open" and
+  not f.getBody().(CallExpr).getCallee().(MemberExpr).getPropertyName().matches("close")
+select f, "Serial port opened but not properly closed - resource leak risk", "resource", "warning"
